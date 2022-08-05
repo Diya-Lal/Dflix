@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MoviesService } from 'src/app/services/movies.service';
 // import { Router } from '@angular/router';
 // import { getAuth } from 'firebase/auth';
 // import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
@@ -10,7 +12,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
   templateUrl: './favourites.component.html',
   styleUrls: ['./favourites.component.scss'],
 })
-export class FavouritesComponent {
+export class FavouritesComponent implements OnInit {
   // favouriteMovies!: any;
   // currentUser: any;
   // unsubscribe: any;
@@ -58,4 +60,21 @@ export class FavouritesComponent {
   // public ngOnDestroy() {
   //   this.unsubscribe();
   // }
+
+  favouriteMovies: any;
+  constructor(private movieService: MoviesService, private router: Router) {}
+  ngOnInit() {
+    this.getFavouriteMovies();
+  }
+
+  getFavouriteMovies() {
+    this.favouriteMovies = this.movieService.favouritesArray;
+  }
+  removeFromFavourites(movie: any) {
+    this.favouriteMovies = this.movieService.removeFromFavourites(movie);
+  }
+
+  favouriteMoviesHandler(movie: any) {
+    this.router.navigate(['/movie', movie.id]);
+  }
 }

@@ -19,7 +19,7 @@ import { MoviesService } from '../../services/movies.service';
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss'],
 })
-export class MovieDetailsComponent implements OnInit, OnDestroy {
+export class MovieDetailsComponent implements OnInit {
   public movieId: any;
   public movieDetails!: MovieDetails;
   public similarMovies!: FormattedMovie[];
@@ -88,6 +88,14 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     //       'success'
     //     );
     //   });
+    const movieAdded = this.movieService.addToFavourites(this.movieDetails);
+    movieAdded
+      ? this.movieService.openSnackBar(
+          'Added to Favourites Successfully',
+          1000,
+          'success'
+        )
+      : this.movieService.openSnackBar('Movie Already Exists', 1000, 'error');
   }
 
   onMovieClickHandler(event: any) {
@@ -97,9 +105,5 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   public getMovieId(movieIndex: number, movies: any) {
     return movies.at(movieIndex);
-  }
-
-  public ngOnDestroy() {
-    this.authService.unsubscribe();
   }
 }

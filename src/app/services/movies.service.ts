@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class MoviesService {
+  favouritesArray: any = [];
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   public getPopularMovies(language: string): Observable<any> {
@@ -105,6 +106,19 @@ export class MoviesService {
       })
     );
     return formatedMovie;
+  }
+
+  addToFavourites(movie: any) {
+    const isMovieExists = this.favouritesArray.some(
+      (mov: any) => mov.id === movie.id
+    );
+    return isMovieExists ? false : this.favouritesArray.push(movie);
+  }
+  removeFromFavourites(movie: any) {
+    this.favouritesArray = this.favouritesArray.filter(
+      (mov: any) => mov.id !== movie.id
+    );
+    return this.favouritesArray;
   }
 
   openSnackBar(message: string, duration: number, action: string) {
