@@ -3,7 +3,15 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: 'AIzaSyDKUnLO7xRxxXuE4-Ad8Ttf0bEyGamoQVk',
+    authDomain: 'dflix-cd94e.firebaseapp.com',
+    projectId: 'dflix-cd94e',
+    storageBucket: 'dflix-cd94e.appspot.com',
+    messagingSenderId: '522752241223',
+    appId: '1:522752241223:web:d50d5bfa644de7c6ce8b62',
+  },
 };
 
 /*

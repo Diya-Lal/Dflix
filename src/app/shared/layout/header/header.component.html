@@ -1,0 +1,28 @@
+<mat-toolbar class="toolbar">
+  <h1 id="logo" [routerLink]="['/']">DFlix</h1>
+  <span id="menu-list" [routerLink]="['/']"><h6>Movies</h6></span>
+  <span id="menu-list" [routerLink]="['/popular']"
+    ><h6>Popular Movies</h6></span
+  >
+  <span *ngIf="loggedInUser" id="menu-list" [routerLink]="['/favourites']"
+    ><h6>My Favourites</h6></span
+  >
+  <span class="spacer"></span>
+  <ng-container *ngIf="loggedInUser">
+    <div [matMenuTriggerFor]="loggedUserMenu">
+      <mat-icon>account_circle</mat-icon>
+      <mat-icon>expand_more</mat-icon>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!loggedInUser">
+    <button class="mat-button" mat-button [routerLink]="['/signin']">
+      <mat-icon>login</mat-icon>SignIn
+    </button>
+  </ng-container>
+</mat-toolbar>
+<mat-menu #loggedUserMenu="matMenu" backdropClass="sg-vertical-sub-menu">
+  <div mat-menu-item (click)="signOut()">
+    <mat-icon>logout</mat-icon>
+    SignOut
+  </div>
+</mat-menu>

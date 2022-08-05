@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="item">
+    <h1 class="center-content">Sign Up</h1>
+    <form
+      class="form-element"
+      [formGroup]="signUpForm"
+      (ngSubmit)="signUpUser()"
+    >
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email address" formControlName="email" />
+        <mat-error *ngIf="email?.errors?.['required']">
+          Email address is required
+        </mat-error>
+        <mat-error *ngIf="email?.errors?.['email']">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <mat-error *ngIf="password?.errors?.['required']">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="password?.errors?.['pattern']">
+          Password should be atleast 8 characters and should contain uppercase,
+          lowercase and numbers
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <mat-error *ngIf="confirmPassword?.errors?.['required']">
+          Confirm Password is required
+        </mat-error>
+        <mat-error *ngIf="confirmPassword?.errors?.['pattern']">
+          Password should be atleast 8 characters and should contain uppercase,
+          lowercase and numbers
+        </mat-error>
+      </mat-form-field>
+      <mat-error
+        *ngIf="signUpForm.errors?.['passwordsDontMatch']"
+        style="font-size: 12px"
+      >
+        Passwords should match
+      </mat-error>
+      <div class="center-content">
+        <button
+          [disabled]="!signUpForm.valid"
+          mat-raised-button
+          color="primary"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

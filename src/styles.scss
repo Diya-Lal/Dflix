@@ -1,1 +1,90 @@
-/* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+@include mat.core();
+
+$dflix-primary: mat.define-palette(mat.$indigo-palette);
+$dflix-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+$dflix-warn: mat.define-palette(mat.$red-palette);
+
+$dflix-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $dflix-primary,
+      accent: $dflix-accent,
+      warn: $dflix-warn,
+    ),
+  )
+);
+
+@include mat.all-component-themes($dflix-theme);
+
+html,
+body {
+  height: 100%;
+  color: white;
+  background: black !important;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+}
+
+.mat-select-value {
+  color: white !important;
+}
+.mat-form-field-outline {
+  color: white !important;
+}
+.mat-form-field-label {
+  color: white !important;
+}
+
+.mat-raised-button.mat-primary.mat-button-disabled {
+  color: gray !important;
+}
+.mat-raised-button.mat-primary {
+  background-color: white !important;
+  color: black !important;
+}
+
+.mat-button-effect {
+  margin: 6px 12px 6px 0;
+}
+
+.back-nav {
+  font-size: 30px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item {
+  border: 1px solid white;
+  padding: 4%;
+  border-radius: 40px;
+  width: 60%;
+}
+
+.form-element {
+  display: grid;
+}
+
+.center-content {
+  text-align: center;
+}
+
+.success-snackbar {
+  background-color: green;
+  font-weight: bold;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: red;
+  font-weight: bold;
+  color: white;
+}

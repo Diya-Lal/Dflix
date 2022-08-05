@@ -1,0 +1,61 @@
+<mat-icon [routerLink]="['/']" class="back-nav">arrow_back</mat-icon>
+
+<div class="movie-container">
+  <div class="movie-image">
+    <img
+      src="{{ imageUrl }}{{ movieDetails?.poster_path }}"
+      width="400"
+      height="400"
+    />
+  </div>
+  <div class="movie-details">
+    <div>
+      <button
+        class="mat-button-effect"
+        style="float: right"
+        *ngIf="loggedInUser"
+        mat-raised-button
+        color="primary"
+        (click)="addToFavourites()"
+      >
+        <mat-icon>star</mat-icon>
+        Add to Favourites
+      </button>
+      <h1>{{ movieDetails?.title }}</h1>
+    </div>
+    <h3>{{ movieDetails?.tagline }}</h3>
+    <p>{{ movieDetails?.overview }}</p>
+    <div class="detail-items">
+      <mat-icon>stars</mat-icon>
+      Rating:
+      {{ movieDetails?.vote_average }} <mat-icon>movie</mat-icon>
+      Genre:
+      <ng-container *ngFor="let genres of movieDetails?.genres">
+        {{ genres?.name }}
+      </ng-container>
+      <span id="item" (click)="trailerHandlrer(movieDetails.homepage)"
+        ><mat-icon>play_circle_outline</mat-icon> Watch Trailer</span
+      >
+    </div>
+    <h3>Cast</h3>
+    <div class="movie-cast">
+      <div *ngFor="let cast of credits">
+        <img
+          style="border-radius: 45%"
+          src="{{ imageUrl }}{{ cast.profile_path }}"
+          width="100"
+          height="100"
+        />
+        <div style="display: block">
+          <p>{{ cast.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-slider
+  [title]="'Similar Movie'"
+  [data]="similarMovies"
+  (movieClicked)="onMovieClickHandler($event)"
+></app-slider>

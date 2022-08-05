@@ -1,0 +1,14 @@
+:host ::ng-deep ng-image-slider .img-div {
+  cursor: pointer;
+}
+
+:host ::ng-deep ng-image-slider .img-div:hover {
+  transform: scale(1.2);
+}
+
+:host ::ng-deep .prev {
+  color: black !important;
+}
+:host ::ng-deep .next {
+  color: black !important;
+}

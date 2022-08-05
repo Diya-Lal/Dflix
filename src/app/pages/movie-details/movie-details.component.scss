@@ -1,0 +1,26 @@
+.movie-container {
+  display: flex;
+}
+
+.movie-details {
+  margin-left: 20px;
+}
+
+.detail-items {
+  display: flex;
+  justify-content: space-around;
+}
+
+#item {
+  cursor: pointer;
+}
+
+.button {
+  margin-left: 20%;
+}
+
+.movie-cast {
+  display: flex;
+  justify-content: space-around;
+  margin: 2% 0%;
+}

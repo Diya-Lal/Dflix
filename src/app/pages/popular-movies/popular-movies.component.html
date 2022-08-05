@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="popular-movies">
+    <mat-form-field appearance="outline">
+      <mat-label>Language</mat-label>
+      <mat-select
+        [(ngModel)]="movieLanguage"
+        name="language"
+        (selectionChange)="getPopularMovies($event.value)"
+      >
+        <mat-option
+          class="not-empty-select"
+          *ngFor="let language of languages"
+          [value]="language.id"
+        >
+          {{ language.value }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <canvas
+      class="canvas"
+      width="800"
+      height="400"
+      id="movies-chart"
+      baseChart
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [legend]="barChartLegend"
+      [type]="'bar'"
+    >
+    </canvas>
+  </div>
+</div>

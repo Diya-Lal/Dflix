@@ -107,5 +107,7 @@
       }
     }
   },
-  "defaultProject": "dflix"
+  "cli": {
+    "analytics": false
+  }
 }

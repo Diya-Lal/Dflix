@@ -1,0 +1,10 @@
+<div class="movie-slider">
+  <h3>{{ title }}</h3>
+  <ng-image-slider
+    [images]="data"
+    [imagePopup]="false"
+    [imageSize]="{ width: 150, height: 200, space: 8 }"
+    #nav
+    (imageClick)="onClickEventHandler($event)"
+  ></ng-image-slider>
+</div>

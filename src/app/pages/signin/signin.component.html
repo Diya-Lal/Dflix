@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="item">
+    <h1 class="center-content">Login</h1>
+    <form class="form-element" [formGroup]="signIn" (ngSubmit)="signInUser()">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Email address" formControlName="email" />
+        <mat-error *ngIf="email?.errors?.['required']">
+          Email address is required
+        </mat-error>
+        <mat-error *ngIf="email?.errors?.['email']">
+          Please enter a valid email address
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+        />
+        <mat-error *ngIf="password?.errors?.['required']">
+          Password is required
+        </mat-error>
+      </mat-form-field>
+      <mat-error *ngIf="signIn.errors?.['passwordsDontMatch']">
+        Passwords should match
+      </mat-error>
+      <div class="center-content">
+        <button [disabled]="!signIn.valid" mat-raised-button color="primary">
+          Login
+        </button>
+        <div class="login-action">
+          <p>New User? Please register here</p>
+          <a [routerLink]="['/signup']">Sign Up</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

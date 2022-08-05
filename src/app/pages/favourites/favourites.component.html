@@ -1,0 +1,23 @@
+<!-- <div class="movie-cards">
+  <ng-container *ngIf="favouriteMovies?.length > 0; else message">
+    <div *ngFor="let fav of favouriteMovies">
+      <app-card
+        [title]="fav.title"
+        [image]="fav.poster_path"
+        (onCardClickedEvent)="favouriteMoviesHandler(fav)"
+      ></app-card>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="removeFromFavourites(fav)"
+      >
+        Remove
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #message>
+    <p class="center-content" *ngIf="!isLoading">
+      Add your favourite movies here
+    </p>
+  </ng-template>
+</div> -->

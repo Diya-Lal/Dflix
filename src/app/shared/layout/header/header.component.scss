@@ -1,0 +1,23 @@
+.mat-toolbar {
+  background: black !important;
+  color: white;
+  font-weight: bold;
+  font-size: larger;
+  margin: 10px 30px;
+  padding-right: 50px;
+}
+
+#logo {
+  color: red;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+#menu-list {
+  margin-left: 40px;
+  cursor: pointer;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

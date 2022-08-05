@@ -1,0 +1,12 @@
+<app-slider
+  [title]="'Trending'"
+  [data]="trendingMovies"
+  (movieClicked)="onMovieClickHandler($event, 'trending')"
+>
+</app-slider>
+<app-slider
+  [title]="'Upcoming Movies'"
+  [data]="upComingMovies"
+  (movieClicked)="onMovieClickHandler($event, 'upcoming')"
+>
+</app-slider>
