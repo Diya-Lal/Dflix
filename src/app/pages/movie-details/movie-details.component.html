@@ -3,6 +3,7 @@
 <div class="movie-container">
   <div class="movie-image">
     <img
+      class="detail-image"
       src="{{ imageUrl }}{{ movieDetails?.poster_path }}"
       width="400"
       height="400"
@@ -27,9 +28,9 @@
     <p>{{ movieDetails?.overview }}</p>
     <div class="detail-items">
       <mat-icon>stars</mat-icon>
-      Rating:
+      <span>Rating:</span>
       {{ movieDetails?.vote_average }} <mat-icon>movie</mat-icon>
-      Genre:
+      <span>Genre:</span>
       <ng-container *ngFor="let genres of movieDetails?.genres">
         {{ genres?.name }}
       </ng-container>

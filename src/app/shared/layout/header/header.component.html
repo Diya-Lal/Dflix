@@ -26,3 +26,21 @@
     SignOut
   </div>
 </mat-menu>
+
+<div class="resp-menu">
+  <mat-toolbar>
+    <mat-icon style="padding-right: 20px" [matMenuTriggerFor]="respMenu"
+      >menu</mat-icon
+    >
+    <h1 id="logo" [routerLink]="['/']">DFlix</h1>
+  </mat-toolbar>
+  <mat-menu #respMenu="matMenu" backdropClass="sg-vertical-sub-menu">
+    <div mat-menu-item [routerLink]="['/']">Movies</div>
+    <div mat-menu-item [routerLink]="['/popular']">Popular Movies</div>
+    <div mat-menu-item [routerLink]="['/favourites']">Favourites</div>
+    <div mat-menu-item *ngIf="!loggedInUser" [routerLink]="['/signin']">
+      SignIn
+    </div>
+    <div mat-menu-item *ngIf="loggedInUser" (click)="signOut()">SignOut</div>
+  </mat-menu>
+</div>

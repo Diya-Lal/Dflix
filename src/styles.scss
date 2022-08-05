@@ -88,3 +88,35 @@ body {
   font-weight: bold;
   color: white;
 }
+
+@media only screen and (max-width: 425px) {
+  .toolbar {
+    display: none !important;
+  }
+  .resp-menu {
+    display: block !important;
+  }
+  .movie-container {
+    display: block !important;
+  }
+  .detail-items {
+    display: block !important;
+  }
+
+  .detail-image {
+    width: 100% !important;
+  }
+  .movie-cast {
+    display: block !important;
+    margin: 2% 0%;
+    text-align: center;
+  }
+
+  .chart {
+    width: 300px !important;
+    overflow: scroll !important;
+  }
+  canvas {
+    width: 400px !important;
+  }
+}

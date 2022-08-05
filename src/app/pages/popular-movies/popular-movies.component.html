@@ -17,17 +17,19 @@
       </mat-select>
     </mat-form-field>
 
-    <canvas
-      class="canvas"
-      width="800"
-      height="400"
-      id="movies-chart"
-      baseChart
-      [data]="barChartData"
-      [options]="barChartOptions"
-      [legend]="barChartLegend"
-      [type]="'bar'"
-    >
-    </canvas>
+    <div class="chart">
+      <canvas
+        class="canvas"
+        width="800"
+        height="400"
+        id="movies-chart"
+        baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [type]="'bar'"
+      >
+      </canvas>
+    </div>
   </div>
 </div>
