@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Output() logoutEvent: EventEmitter<any> = new EventEmitter();
-  @Input() loggedInUser!: any;
+  @Input() loggedInUser: User | any;
   constructor() {}
 
   ngOnInit(): void {}

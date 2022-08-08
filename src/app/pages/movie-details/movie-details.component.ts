@@ -79,15 +79,6 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   public addToFavourites() {
-    // this.authService
-    //   .addFavourites(this.movieDetails)
-    //   .subscribe((AddToFavouritesSuccess) => {
-    //     this.movieService.openSnackBar(
-    //       'Added to Favourites Successfully',
-    //       1000,
-    //       'success'
-    //     );
-    //   });
     const movieAdded = this.movieService.addToFavourites(this.movieDetails);
     movieAdded
       ? this.movieService.openSnackBar(

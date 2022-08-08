@@ -46,7 +46,7 @@ export class SigninComponent implements OnInit {
       .subscribe(
         (SignInSuccess) => {
           this.movieService.openSnackBar(
-            'Successfully LoggedIn',
+            'Successfully Signed In',
             1000,
             'success'
           );

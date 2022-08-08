@@ -1,5 +1,5 @@
 <div class="movie-cards">
-  <ng-container *ngIf="favouriteMovies?.length > 0; else message">
+  <ng-container *ngIf="favouriteMovies!.length > 0; else message">
     <div *ngFor="let fav of favouriteMovies">
       <app-card
         [title]="fav.title"

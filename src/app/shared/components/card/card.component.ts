@@ -9,8 +9,8 @@ import { IMAGE_URL } from 'src/app/constants/urls-constants';
 export class CardComponent implements OnInit {
   @Input() image!: string;
   @Input() title!: string;
-  @Output() onCardClickedEvent: EventEmitter<any> = new EventEmitter();
-  imageUrl = IMAGE_URL;
+  @Output() onCardClickedEvent: EventEmitter<string> = new EventEmitter();
+  imageUrl: string = IMAGE_URL;
   constructor() {}
 
   ngOnInit(): void {}

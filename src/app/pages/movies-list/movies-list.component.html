@@ -10,3 +10,10 @@
   (movieClicked)="onMovieClickHandler($event, 'upcoming')"
 >
 </app-slider>
+
+<app-slider
+  [title]="'Top Rated Movies'"
+  [data]="topRatedMovies"
+  (movieClicked)="onMovieClickHandler($event, 'topRatedMovies')"
+>
+</app-slider>

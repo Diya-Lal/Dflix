@@ -9,6 +9,7 @@ import {
 import { doc, getFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { onSnapshot, setDoc } from 'firebase/firestore';
+import { User } from '../shared/modals/users';
 
 @Injectable({
   providedIn: 'root',
@@ -39,56 +40,4 @@ export class AuthenticationService {
   logout() {
     return from(this.auth.signOut());
   }
-
-  // getMoviesSnapshot() {
-  //   let subscription: any;
-  //   this.signedInUser = this.getCurrentUser();
-  //   this.unsubscribe = onSnapshot(
-  //     doc(this.db, 'favourites', this.signedInUser.uid),
-  //     (movie) => {
-  //       if (movie.exists()) {
-  //         this.favMovies = movie.data()['movies'];
-  //       } else {
-  //         this.favMovies = [];
-  //       }
-  //     }
-  //   );
-  // }
-
-  // addFavourites(movie: any): Observable<any> {
-  //   this.getMoviesSnapshot();
-  //   this.favouritesRef = doc(this.db, 'favourites', this.signedInUser.uid);
-  //   const movieDetail = {
-  //     id: movie.id,
-  //     poster_path: movie.poster_path,
-  //     title: movie.title,
-  //   };
-  //   return from(
-  //     setDoc(
-  //       this.favouritesRef,
-  //       {
-  //         movies: this.favMovies
-  //           ? [...this.favMovies, movieDetail]
-  //           : [movieDetail],
-  //       },
-  //       { merge: true }
-  //     )
-  //   );
-  // }
-
-  // removeFavourites(movie: any): Observable<any> {
-  //   this.getMoviesSnapshot();
-  //   this.favouritesRef = doc(this.db, 'favourites', this.signedInUser.uid);
-  //   return from(
-  //     setDoc(
-  //       this.favouritesRef,
-  //       {
-  //         movies: this.favMovies.filter(
-  //           (favMovie: any) => favMovie.id !== movie.id
-  //         ),
-  //       },
-  //       { merge: true }
-  //     )
-  //   );
-  // }
 }

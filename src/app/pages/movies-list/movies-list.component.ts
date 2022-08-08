@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  FormattedMovie,
+  MovieDetails,
+  Movies,
+} from 'src/app/shared/modals/movies';
 import { IMAGE_URL } from '../../constants/urls-constants';
 import { MoviesService } from '../../services/movies.service';
 
@@ -9,23 +14,25 @@ import { MoviesService } from '../../services/movies.service';
   styleUrls: ['./movies-list.component.scss'],
 })
 export class MoviesListComponent implements OnInit {
-  public trendingMovies: any = [];
-  public trendingMoviesList: any = [];
-  public upComingMovies: any = [];
-  public upComingMoviesList: any = [];
-  public latestTV: any = [];
+  public trendingMovies: FormattedMovie[] = [];
+  public trendingMoviesList: MovieDetails[] = [];
+  public upComingMovies: FormattedMovie[] = [];
+  public upComingMoviesList: MovieDetails[] = [];
+  public topRatedMovieList: MovieDetails[] = [];
+  public topRatedMovies: FormattedMovie[] = [];
   public movieId!: number;
   constructor(private moviesService: MoviesService, private router: Router) {}
 
   ngOnInit(): void {
     this.getTrendingMovies();
     this.getUpcoming();
+    this.getTopRatedMovies();
   }
 
   public getTrendingMovies() {
     this.moviesService
       .getTrendingMovies()
-      .subscribe((GetTrendingMoviesSuccess: any) => {
+      .subscribe((GetTrendingMoviesSuccess: Movies) => {
         this.trendingMoviesList = GetTrendingMoviesSuccess.results;
         this.trendingMovies = this.moviesService.formatMovieData(
           GetTrendingMoviesSuccess.results
@@ -36,7 +43,7 @@ export class MoviesListComponent implements OnInit {
   public getUpcoming() {
     this.moviesService
       .getUpcomingMovies()
-      .subscribe((GetUpcomingMoviesSuccess: any) => {
+      .subscribe((GetUpcomingMoviesSuccess: Movies) => {
         this.upComingMoviesList = GetUpcomingMoviesSuccess.results;
         this.upComingMovies = this.moviesService.formatMovieData(
           GetUpcomingMoviesSuccess.results
@@ -44,15 +51,29 @@ export class MoviesListComponent implements OnInit {
       });
   }
 
-  onMovieClickHandler(event: any, movieType: string) {
+  public getTopRatedMovies() {
+    this.moviesService
+      .getTopRatedMovies()
+      .subscribe((GetTopRatedMovieSuccess) => {
+        this.topRatedMovieList = GetTopRatedMovieSuccess.results;
+        this.topRatedMovies = this.moviesService.formatMovieData(
+          GetTopRatedMovieSuccess.results
+        );
+      });
+  }
+
+  onMovieClickHandler(movieIndex: number, movieType: string) {
     switch (movieType) {
       case 'trending':
-        this.movieId = this.getMovieId(event, this.trendingMoviesList).id;
+        this.movieId = this.getMovieId(movieIndex, this.trendingMoviesList).id;
         break;
       case 'upcoming':
-        this.movieId = this.getMovieId(event, this.upComingMoviesList).id;
+        this.movieId = this.getMovieId(movieIndex, this.upComingMoviesList).id;
+        break;
+      case 'topRatedMovies':
+        this.movieId = this.getMovieId(movieIndex, this.topRatedMovieList).id;
+        break;
     }
-    console.log(this.movieId);
     this.router.navigate(['/movie', this.movieId]);
   }
 

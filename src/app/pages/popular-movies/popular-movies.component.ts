@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { map, pipe, take } from 'rxjs';
-import { MovieDetails, Movies } from 'src/app/shared/modals/movies';
+import { LANGUAGES, MovieDetails, Movies } from 'src/app/shared/modals/movies';
 import { MoviesService } from '../../services/movies.service';
 
 @Component({
@@ -19,12 +19,8 @@ export class PopularMoviesComponent implements OnInit {
   public charColours = {
     backgroundColor: 'white',
   };
-  public languages = [
-    { id: 'en-US', value: 'English' },
-    { id: 'de-DE', value: 'German' },
-    { id: 'fr-FR', value: 'French' },
-  ];
-  public movieLanguage: any = { id: 'en-US', value: 'English' };
+  public languages = LANGUAGES;
+  public movieLanguage = this.languages[0].id;
   public barChartData!: ChartConfiguration<'bar'>['data'];
 
   public barChartOptions: ChartConfiguration<'bar'>['options'] = {

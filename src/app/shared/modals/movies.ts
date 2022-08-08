@@ -77,3 +77,9 @@ export interface FormattedMovie {
   thumbImage: string;
   title: string;
 }
+
+export const LANGUAGES = [
+  { id: 'en-US', value: 'English' },
+  { id: 'de-DE', value: 'German' },
+  { id: 'fr-FR', value: 'French' },
+];

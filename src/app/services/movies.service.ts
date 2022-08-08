@@ -14,7 +14,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class MoviesService {
-  favouritesArray: any = [];
+  favouritesArray: MovieDetails[] = [];
+  params = {
+    api_key: `${API_KEY}`,
+    language: 'en-US',
+    page: 1,
+  };
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   public getPopularMovies(language: string): Observable<any> {
@@ -43,57 +48,38 @@ export class MoviesService {
     });
   }
 
-  public getLatestTVShows(): Observable<any> {
-    const latestTV = `tv/latest`;
-    return this.http.get(`${API_BASE_URL}${latestTV}`, {
-      params: {
-        api_key: `${API_KEY}`,
-        language: 'en-US',
-      },
-    });
-  }
-
   public getUpcomingMovies(): Observable<any> {
     const upcoming = `movie/upcoming`;
     return this.http.get(`${API_BASE_URL}${upcoming}`, {
-      params: {
-        api_key: `${API_KEY}`,
-        language: 'en-US',
-        page: 1,
-      },
+      params: this.params,
+    });
+  }
+
+  public getTopRatedMovies(): Observable<any> {
+    const topRatedMovie = `movie/top_rated`;
+    return this.http.get(`${API_BASE_URL}${topRatedMovie}`, {
+      params: this.params,
     });
   }
 
   public getMovieDetailsById(movieId: number): Observable<MovieDetails> {
     const detailsUrls = `movie/${movieId}`;
     return this.http.get<MovieDetails>(`${API_BASE_URL}${detailsUrls}`, {
-      params: {
-        api_key: `${API_KEY}`,
-        language: 'en-US',
-        page: 1,
-      },
+      params: this.params,
     });
   }
 
   public getSimilarMovieById(movieId: number): Observable<Movies> {
     const similarUrls = `movie/${movieId}/similar`;
     return this.http.get<Movies>(`${API_BASE_URL}${similarUrls}`, {
-      params: {
-        api_key: `${API_KEY}`,
-        language: 'en-US',
-        page: 1,
-      },
+      params: this.params,
     });
   }
 
   public getCreditsByMovieId(movieId: number): Observable<Credits> {
     const creditsUrls = `movie/${movieId}/credits`;
     return this.http.get<Credits>(`${API_BASE_URL}${creditsUrls}`, {
-      params: {
-        api_key: `${API_KEY}`,
-        language: 'en-US',
-        page: 1,
-      },
+      params: this.params,
     });
   }
 
@@ -108,13 +94,13 @@ export class MoviesService {
     return formatedMovie;
   }
 
-  addToFavourites(movie: any) {
+  addToFavourites(movie: MovieDetails) {
     const isMovieExists = this.favouritesArray.some(
       (mov: any) => mov.id === movie.id
     );
     return isMovieExists ? false : this.favouritesArray.push(movie);
   }
-  removeFromFavourites(movie: any) {
+  removeFromFavourites(movie: MovieDetails) {
     this.favouritesArray = this.favouritesArray.filter(
       (mov: any) => mov.id !== movie.id
     );

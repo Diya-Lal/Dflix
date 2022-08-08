@@ -78,7 +78,7 @@ export class SignupComponent implements OnInit {
     this.authService.signUp(this.email?.value, this.password?.value).subscribe(
       (SignUpSuccess) => {
         this.movieService.openSnackBar(
-          'Successfully Registered',
+          'Successfully Signed Up',
           1000,
           'success'
         );
