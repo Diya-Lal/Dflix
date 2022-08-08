@@ -26,7 +26,6 @@ describe('SignupComponent', () => {
         BrowserAnimationsModule,
         provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
         provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
       ],
       declarations: [SignupComponent],
     }).compileComponents();

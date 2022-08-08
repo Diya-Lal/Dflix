@@ -19,7 +19,6 @@ export class AuthenticationService {
   currentUser: any;
   authUser: any = getAuth();
   signedInUser: any;
-  db = getFirestore();
   favouritesRef: any;
   favMovies: any;
   unsubscribe!: any;

@@ -11,9 +11,11 @@ import {
 } from '@angular/fire/auth-guard';
 import { FavouritesComponent } from './pages/favourites/favourites.component';
 import { SigninComponent } from './pages/signin/signin.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
-const redirectUnauthorizedUsersToLogin = () => redirectUnauthorizedTo(['/']);
-const redirectLoggedInUsersToLogout = () => redirectLoggedInTo(['home']);
+const redirectUnauthorizedUsersToLogin = () =>
+  redirectUnauthorizedTo(['signin']);
+const redirectLoggedInUsersToLogout = () => redirectLoggedInTo(['']);
 
 const routes: Routes = [
   { path: '', component: MoviesListComponent },
@@ -33,6 +35,10 @@ const routes: Routes = [
     path: 'favourites',
     component: FavouritesComponent,
     ...canActivate(redirectUnauthorizedUsersToLogin),
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent,
   },
 ];
 
