@@ -8,9 +8,8 @@ describe('SliderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SliderComponent ]
-    })
-    .compileComponents();
+      declarations: [SliderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SliderComponent);
     component = fixture.componentInstance;
@@ -19,5 +18,11 @@ describe('SliderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('should emit on click', () => {
+    spyOn(component.movieClicked, 'emit');
+    component.onClickEventHandler(1);
+    expect(component.movieClicked.emit).toHaveBeenCalled();
+    expect(component.movieClicked.emit).toHaveBeenCalledWith(1);
   });
 });

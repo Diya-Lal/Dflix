@@ -23,4 +23,10 @@ describe('HeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should emit on click', () => {
+    spyOn(component.logoutEvent, 'emit');
+    component.signOut();
+    expect(component.logoutEvent.emit).toHaveBeenCalled();
+  });
 });

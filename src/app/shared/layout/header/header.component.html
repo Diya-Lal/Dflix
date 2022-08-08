@@ -21,10 +21,10 @@
   </ng-container>
 </mat-toolbar>
 <mat-menu #loggedUserMenu="matMenu" backdropClass="sg-vertical-sub-menu">
-  <div mat-menu-item (click)="signOut()">
+  <button class="logout" mat-menu-item (click)="signOut()">
     <mat-icon>logout</mat-icon>
     SignOut
-  </div>
+  </button>
 </mat-menu>
 
 <div class="resp-menu">
@@ -35,12 +35,14 @@
     <h1 id="logo" [routerLink]="['/']">DFlix</h1>
   </mat-toolbar>
   <mat-menu #respMenu="matMenu" backdropClass="sg-vertical-sub-menu">
-    <div mat-menu-item [routerLink]="['/']">Movies</div>
-    <div mat-menu-item [routerLink]="['/popular']">Popular Movies</div>
-    <div mat-menu-item [routerLink]="['/favourites']">Favourites</div>
-    <div mat-menu-item *ngIf="!loggedInUser" [routerLink]="['/signin']">
+    <button mat-menu-item [routerLink]="['/']">Movies</button>
+    <button mat-menu-item [routerLink]="['/popular']">Popular Movies</button>
+    <button mat-menu-item [routerLink]="['/favourites']">Favourites</button>
+    <button mat-menu-item *ngIf="!loggedInUser" [routerLink]="['/signin']">
       SignIn
-    </div>
-    <div mat-menu-item *ngIf="loggedInUser" (click)="signOut()">SignOut</div>
+    </button>
+    <button mat-menu-item *ngIf="loggedInUser" (click)="signOut()">
+      SignOut
+    </button>
   </mat-menu>
 </div>
