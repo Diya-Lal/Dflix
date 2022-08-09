@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   firebaseConfig: {
-    apiKey: 'AIzaSyDKUnLO7xRxxXuE4-Ad8Ttf0bEyGamoQVk',
+    apiKey: '',
     authDomain: 'dflix-cd94e.firebaseapp.com',
     projectId: 'dflix-cd94e',
     storageBucket: 'dflix-cd94e.appspot.com',
