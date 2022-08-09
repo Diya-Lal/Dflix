@@ -65,19 +65,24 @@ export class MoviesListComponent implements OnInit {
   onMovieClickHandler(movieIndex: number, movieType: string) {
     switch (movieType) {
       case 'trending':
-        this.movieId = this.getMovieId(movieIndex, this.trendingMoviesList).id;
+        this.movieId = this.moviesService.getMovieId(
+          movieIndex,
+          this.trendingMoviesList
+        ).id;
         break;
       case 'upcoming':
-        this.movieId = this.getMovieId(movieIndex, this.upComingMoviesList).id;
+        this.movieId = this.moviesService.getMovieId(
+          movieIndex,
+          this.upComingMoviesList
+        ).id;
         break;
       case 'topRatedMovies':
-        this.movieId = this.getMovieId(movieIndex, this.topRatedMovieList).id;
+        this.movieId = this.moviesService.getMovieId(
+          movieIndex,
+          this.topRatedMovieList
+        ).id;
         break;
     }
     this.router.navigate(['/movie', this.movieId]);
-  }
-
-  public getMovieId(movieIndex: number, movies: any) {
-    return movies.at(movieIndex);
   }
 }

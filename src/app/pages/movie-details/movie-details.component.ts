@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { getAuth } from 'firebase/auth';
 import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
-import { first, pipe } from 'rxjs';
+import { first, pipe, switchMap } from 'rxjs';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import {
   Cast,
@@ -39,19 +39,20 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.movieId = params.get('id');
-      this.getMovieDetails(this.movieId);
-      this.getSimilarMovies(this.movieId);
-      this.getMvoieCredits(this.movieId);
-    });
+    this.getMovieDetails();
   }
 
-  public getMovieDetails(movieId: number) {
-    this.movieService
-      .getMovieDetailsById(movieId)
+  public getMovieDetails() {
+    this.activatedRoute.paramMap
+      .pipe(
+        switchMap((params: Params) => {
+          this.movieId = params['get']('id');
+          return this.movieService.getMovieDetailsById(this.movieId);
+        })
+      )
       .subscribe((GetMovieDetailsSuccess: MovieDetails) => {
         this.movieDetails = GetMovieDetailsSuccess;
+        this.getMvoieCredits(this.movieId);
       });
   }
 
@@ -60,6 +61,7 @@ export class MovieDetailsComponent implements OnInit {
       .getCreditsByMovieId(movieId)
       .subscribe((GetCreditsSuccess: Credits) => {
         this.credits = GetCreditsSuccess.cast.slice(0, 5);
+        this.getSimilarMovies(this.movieId);
       });
   }
 
@@ -90,11 +92,10 @@ export class MovieDetailsComponent implements OnInit {
   }
 
   onMovieClickHandler(event: any) {
-    const movieId = this.getMovieId(event, this.similarMoviesList).id;
+    const movieId = this.movieService.getMovieId(
+      event,
+      this.similarMoviesList
+    ).id;
     this.router.navigate(['/movie', movieId]);
-  }
-
-  public getMovieId(movieIndex: number, movies: any) {
-    return movies.at(movieIndex);
   }
 }

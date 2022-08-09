@@ -1,5 +1,6 @@
 @use "@angular/material" as mat;
 @include mat.core();
+@import "./normalize.css";
 
 $dflix-primary: mat.define-palette(mat.$indigo-palette);
 $dflix-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
@@ -26,6 +27,10 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   overflow-x: hidden;
+}
+
+a {
+  color: dodgerblue;
 }
 
 .mat-select-value {

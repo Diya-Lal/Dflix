@@ -107,6 +107,10 @@ export class MoviesService {
     return this.favouritesArray;
   }
 
+  public getMovieId(movieIndex: number, movies: any) {
+    return movies.at(movieIndex);
+  }
+
   openSnackBar(message: string, duration: number, action: string) {
     this.snackBar.open(message, '', {
       duration: duration,

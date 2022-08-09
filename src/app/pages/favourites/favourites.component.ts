@@ -25,4 +25,7 @@ export class FavouritesComponent implements OnInit {
   favouriteMoviesHandler(movie: any) {
     this.router.navigate(['/movie', movie.id]);
   }
+  trackByFn(index: number, movie: MovieDetails) {
+    return movie.id;
+  }
 }

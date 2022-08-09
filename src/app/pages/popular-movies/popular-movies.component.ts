@@ -50,6 +50,7 @@ export class PopularMoviesComponent implements OnInit {
     const data = {
       data: popularMovies.map((movie: MovieDetails) => movie.popularity),
       label: 'Popularity',
+      backgroundColor: 'dodgerblue',
     };
     this.chartData.push(data);
     this.barChartData = {

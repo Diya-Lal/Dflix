@@ -1,6 +1,6 @@
 <div class="movie-cards">
   <ng-container *ngIf="favouriteMovies!.length > 0; else message">
-    <div *ngFor="let fav of favouriteMovies">
+    <div *ngFor="let fav of favouriteMovies; trackBy: trackByFn">
       <app-card
         [title]="fav.title"
         [image]="fav.poster_path"
