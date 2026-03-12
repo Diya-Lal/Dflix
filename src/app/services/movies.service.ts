@@ -1,5 +1,5 @@
-import { Injectable, Query } from '@angular/core';
-import { Observable, take, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_BASE_URL, API_KEY, IMAGE_URL } from '../constants/urls-constants';
 import {
@@ -8,115 +8,89 @@ import {
   MovieDetails,
   Movies,
 } from '../shared/modals/movies';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+const BASE_PARAMS = {
+  api_key: API_KEY,
+  language: 'en-US',
+  page: 1,
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class MoviesService {
   favouritesArray: MovieDetails[] = [];
-  params = {
-    api_key: `${API_KEY}`,
-    language: 'en-US',
-    page: 1,
-  };
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
-  public getPopularMovies(language: string): Observable<any> {
-    const popular_url = `discover/movie`;
-    return this.http
-      .get(`${API_BASE_URL}${popular_url}`, {
-        params: {
-          api_key: `${API_KEY}`,
-          language: `${language}`,
-          sort_by: 'popularity.desc',
-          include_adult: false,
-          include_video: false,
-          page: 1,
-          with_watch_monetization_types: 'flatrate',
-        },
-      })
-      .pipe(take(10));
-  }
+  constructor(private http: HttpClient) {}
 
-  public getTrendingMovies(): Observable<any> {
-    const trending_url = `trending/all/day`;
-    return this.http.get(`${API_BASE_URL}${trending_url}`, {
+  public getPopularMovies(language: string): Observable<Movies> {
+    return this.http.get<Movies>(`${API_BASE_URL}discover/movie`, {
       params: {
-        api_key: `${API_KEY}`,
+        api_key: API_KEY,
+        language,
+        sort_by: 'popularity.desc',
+        include_adult: false,
+        include_video: false,
+        page: 1,
+        with_watch_monetization_types: 'flatrate',
       },
     });
   }
 
-  public getUpcomingMovies(): Observable<any> {
-    const upcoming = `movie/upcoming`;
-    return this.http.get(`${API_BASE_URL}${upcoming}`, {
-      params: this.params,
+  public getTrendingMovies(): Observable<Movies> {
+    return this.http.get<Movies>(`${API_BASE_URL}trending/all/day`, {
+      params: { api_key: API_KEY },
     });
   }
 
-  public getTopRatedMovies(): Observable<any> {
-    const topRatedMovie = `movie/top_rated`;
-    return this.http.get(`${API_BASE_URL}${topRatedMovie}`, {
-      params: this.params,
+  public getUpcomingMovies(): Observable<Movies> {
+    return this.http.get<Movies>(`${API_BASE_URL}movie/upcoming`, {
+      params: BASE_PARAMS,
+    });
+  }
+
+  public getTopRatedMovies(): Observable<Movies> {
+    return this.http.get<Movies>(`${API_BASE_URL}movie/top_rated`, {
+      params: BASE_PARAMS,
     });
   }
 
   public getMovieDetailsById(movieId: number): Observable<MovieDetails> {
-    const detailsUrls = `movie/${movieId}`;
-    return this.http.get<MovieDetails>(`${API_BASE_URL}${detailsUrls}`, {
-      params: this.params,
+    return this.http.get<MovieDetails>(`${API_BASE_URL}movie/${movieId}`, {
+      params: BASE_PARAMS,
     });
   }
 
   public getSimilarMovieById(movieId: number): Observable<Movies> {
-    const similarUrls = `movie/${movieId}/similar`;
-    return this.http.get<Movies>(`${API_BASE_URL}${similarUrls}`, {
-      params: this.params,
+    return this.http.get<Movies>(`${API_BASE_URL}movie/${movieId}/similar`, {
+      params: BASE_PARAMS,
     });
   }
 
   public getCreditsByMovieId(movieId: number): Observable<Credits> {
-    const creditsUrls = `movie/${movieId}/credits`;
-    return this.http.get<Credits>(`${API_BASE_URL}${creditsUrls}`, {
-      params: this.params,
+    return this.http.get<Credits>(`${API_BASE_URL}movie/${movieId}/credits`, {
+      params: BASE_PARAMS,
     });
   }
 
-  public formatMovieData(movie: MovieDetails[]): FormattedMovie[] {
-    const formatedMovie: FormattedMovie[] = movie.map(
-      (movie: MovieDetails) => ({
-        image: `${IMAGE_URL}${movie.poster_path}`,
-        thumbImage: `${IMAGE_URL}${movie.poster_path}`,
-        title: movie.original_title,
-      })
-    );
-    return formatedMovie;
+  public formatMovieData(movies: MovieDetails[]): FormattedMovie[] {
+    return movies.map((movie) => ({
+      image: `${IMAGE_URL}${movie.poster_path}`,
+      thumbImage: `${IMAGE_URL}${movie.poster_path}`,
+      title: movie.original_title,
+    }));
   }
 
-  addToFavourites(movie: MovieDetails) {
-    const isMovieExists = this.favouritesArray.some(
-      (mov: any) => mov.id === movie.id
-    );
-    return isMovieExists ? false : this.favouritesArray.push(movie);
+  addToFavourites(movie: MovieDetails): boolean {
+    const exists = this.favouritesArray.some((m) => m.id === movie.id);
+    if (!exists) {
+      this.favouritesArray.push(movie);
+    }
+    return !exists;
   }
-  removeFromFavourites(movie: MovieDetails) {
-    this.favouritesArray = this.favouritesArray.filter(
-      (mov: any) => mov.id !== movie.id
-    );
+
+  removeFromFavourites(movie: MovieDetails): MovieDetails[] {
+    this.favouritesArray = this.favouritesArray.filter((m) => m.id !== movie.id);
     return this.favouritesArray;
-  }
-
-  public getMovieId(movieIndex: number, movies: any) {
-    return movies.at(movieIndex);
-  }
-
-  openSnackBar(message: string, duration: number, action: string) {
-    this.snackBar.open(message, '', {
-      duration: duration,
-      verticalPosition: 'top',
-      panelClass:
-        action === 'success' ? ['success-snackbar'] : ['error-snackbar'],
-    });
   }
 }

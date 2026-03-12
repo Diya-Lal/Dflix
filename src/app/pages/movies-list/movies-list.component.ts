@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  FormattedMovie,
-  MovieDetails,
-  Movies,
-} from 'src/app/shared/modals/movies';
-import { IMAGE_URL } from '../../constants/urls-constants';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { FormattedMovie, MovieDetails, Movies } from 'src/app/shared/modals/movies';
 import { MoviesService } from '../../services/movies.service';
 
 @Component({
@@ -13,76 +10,50 @@ import { MoviesService } from '../../services/movies.service';
   templateUrl: './movies-list.component.html',
   styleUrls: ['./movies-list.component.scss'],
 })
-export class MoviesListComponent implements OnInit {
+export class MoviesListComponent implements OnInit, OnDestroy {
   public trendingMovies: FormattedMovie[] = [];
   public trendingMoviesList: MovieDetails[] = [];
   public upComingMovies: FormattedMovie[] = [];
   public upComingMoviesList: MovieDetails[] = [];
   public topRatedMovieList: MovieDetails[] = [];
   public topRatedMovies: FormattedMovie[] = [];
-  public movieId!: number;
+  private destroy$ = new Subject<void>();
+
   constructor(private moviesService: MoviesService, private router: Router) {}
 
   ngOnInit(): void {
-    this.getTrendingMovies();
-    this.getUpcoming();
-    this.getTopRatedMovies();
-  }
+    forkJoin([
+      this.moviesService.getTrendingMovies(),
+      this.moviesService.getUpcomingMovies(),
+      this.moviesService.getTopRatedMovies(),
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([trending, upcoming, topRated]: [Movies, Movies, Movies]) => {
+        this.trendingMoviesList = trending.results;
+        this.trendingMovies = this.moviesService.formatMovieData(trending.results);
 
-  public getTrendingMovies() {
-    this.moviesService
-      .getTrendingMovies()
-      .subscribe((GetTrendingMoviesSuccess: Movies) => {
-        this.trendingMoviesList = GetTrendingMoviesSuccess.results;
-        this.trendingMovies = this.moviesService.formatMovieData(
-          GetTrendingMoviesSuccess.results
-        );
-      });
-  }
+        this.upComingMoviesList = upcoming.results;
+        this.upComingMovies = this.moviesService.formatMovieData(upcoming.results);
 
-  public getUpcoming() {
-    this.moviesService
-      .getUpcomingMovies()
-      .subscribe((GetUpcomingMoviesSuccess: Movies) => {
-        this.upComingMoviesList = GetUpcomingMoviesSuccess.results;
-        this.upComingMovies = this.moviesService.formatMovieData(
-          GetUpcomingMoviesSuccess.results
-        );
-      });
-  }
-
-  public getTopRatedMovies() {
-    this.moviesService
-      .getTopRatedMovies()
-      .subscribe((GetTopRatedMovieSuccess) => {
-        this.topRatedMovieList = GetTopRatedMovieSuccess.results;
-        this.topRatedMovies = this.moviesService.formatMovieData(
-          GetTopRatedMovieSuccess.results
-        );
+        this.topRatedMovieList = topRated.results;
+        this.topRatedMovies = this.moviesService.formatMovieData(topRated.results);
       });
   }
 
   onMovieClickHandler(movieIndex: number, movieType: string) {
-    switch (movieType) {
-      case 'trending':
-        this.movieId = this.moviesService.getMovieId(
-          movieIndex,
-          this.trendingMoviesList
-        ).id;
-        break;
-      case 'upcoming':
-        this.movieId = this.moviesService.getMovieId(
-          movieIndex,
-          this.upComingMoviesList
-        ).id;
-        break;
-      case 'topRatedMovies':
-        this.movieId = this.moviesService.getMovieId(
-          movieIndex,
-          this.topRatedMovieList
-        ).id;
-        break;
+    const listMap: Record<string, MovieDetails[]> = {
+      trending: this.trendingMoviesList,
+      upcoming: this.upComingMoviesList,
+      topRatedMovies: this.topRatedMovieList,
+    };
+    const movie = listMap[movieType]?.[movieIndex];
+    if (movie) {
+      this.router.navigate(['/movie', movie.id]);
     }
-    this.router.navigate(['/movie', this.movieId]);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

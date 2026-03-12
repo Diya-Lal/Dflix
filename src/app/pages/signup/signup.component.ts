@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -9,19 +9,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MoviesService } from 'src/app/services/movies.service';
-import { AuthenticationService } from '../..//services/authentication.service';
+import { AuthenticationService } from '../../services/authentication.service';
+import { NotificationService } from '../../services/notification.service';
 
 export function passwordsMatchValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const password = control.get('password')?.value;
     const confirmPassword = control.get('confirmPassword')?.value;
-
-    if (password && confirmPassword && password !== confirmPassword) {
-      return { passwordsDontMatch: true };
-    } else {
-      return null;
-    }
+    return password && confirmPassword && password !== confirmPassword
+      ? { passwordsDontMatch: true }
+      : null;
   };
 }
 
@@ -30,7 +27,7 @@ export function passwordsMatchValidator(): ValidatorFn {
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent {
   signUpForm = new FormGroup(
     {
       email: new FormControl('', [Validators.email, Validators.required]),
@@ -38,10 +35,7 @@ export class SignupComponent implements OnInit {
         Validators.required,
         Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}'),
       ]),
-      confirmPassword: new FormControl('', [
-        Validators.required,
-        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}'),
-      ]),
+      confirmPassword: new FormControl('', Validators.required),
     },
     { validators: passwordsMatchValidator() }
   );
@@ -51,13 +45,9 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private authService: AuthenticationService,
-    private router: Router,
-    private movieService: MoviesService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
-
-  ngOnInit(): void {}
-
-  ngAfterViewInit() {}
 
   get email() {
     return this.signUpForm.get('email');
@@ -75,20 +65,16 @@ export class SignupComponent implements OnInit {
     if (!this.signUpForm.valid) {
       return;
     }
-    this.authService.signUp(this.email?.value, this.password?.value).subscribe(
-      (SignUpSuccess) => {
-        this.movieService.openSnackBar(
-          'Successfully Signed Up',
-          1000,
-          'success'
-        );
+    this.authService.signUp(this.email?.value!, this.password?.value!).subscribe({
+      next: () => {
+        this.notificationService.open('Successfully Signed Up', 1000, 'success');
         this.formDirective.resetForm();
         this.router.navigate(['/']);
       },
-      (SignUpFailed) => {
-        this.movieService.openSnackBar(SignUpFailed, 5000, 'error');
+      error: (err) => {
+        this.notificationService.open(err.message, 5000, 'error');
         this.formDirective.resetForm();
-      }
-    );
+      },
+    });
   }
 }

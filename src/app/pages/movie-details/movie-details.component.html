@@ -34,7 +34,7 @@
       <ng-container *ngFor="let genres of movieDetails?.genres">
         {{ genres?.name }}
       </ng-container>
-      <span id="item" (click)="trailerHandlrer(movieDetails.homepage)"
+      <span id="item" (click)="trailerHandler(movieDetails.homepage)"
         ><mat-icon>play_circle_outline</mat-icon> <span>More Details</span>
       </span>
     </div>

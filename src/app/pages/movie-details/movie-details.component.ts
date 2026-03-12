@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { getAuth } from 'firebase/auth';
-import { doc, getFirestore, onSnapshot } from 'firebase/firestore';
-import { first, pipe, switchMap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { MoviesService } from '../../services/movies.service';
+import { NotificationService } from '../../services/notification.service';
 import {
   Cast,
   Credits,
@@ -12,90 +13,74 @@ import {
   Movies,
 } from 'src/app/shared/modals/movies';
 import { IMAGE_URL } from '../../constants/urls-constants';
-import { MoviesService } from '../../services/movies.service';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
   styleUrls: ['./movie-details.component.scss'],
 })
-export class MovieDetailsComponent implements OnInit {
-  public movieId: any;
+export class MovieDetailsComponent implements OnInit, OnDestroy {
+  public movieId!: number;
   public movieDetails!: MovieDetails;
   public similarMovies!: FormattedMovie[];
-  public similarMoviesList!: any[];
+  public similarMoviesList!: MovieDetails[];
   public credits!: Cast[];
   public imageUrl = IMAGE_URL;
-  public loggedInUser: any;
+  public loggedInUser: User | null = null;
+  private destroy$ = new Subject<void>();
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private movieService: MoviesService,
     private authService: AuthenticationService,
+    private notificationService: NotificationService,
     private router: Router
   ) {
-    this.authService.loggedInUser.subscribe(
-      (user) => (this.loggedInUser = user)
-    );
+    this.authService.loggedInUser
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => (this.loggedInUser = user));
   }
 
   ngOnInit(): void {
-    this.getMovieDetails();
-  }
-
-  public getMovieDetails() {
     this.activatedRoute.paramMap
       .pipe(
-        switchMap((params: Params) => {
-          this.movieId = params['get']('id');
-          return this.movieService.getMovieDetailsById(this.movieId);
-        })
+        switchMap((params) => {
+          this.movieId = Number(params.get('id'));
+          return forkJoin([
+            this.movieService.getMovieDetailsById(this.movieId),
+            this.movieService.getCreditsByMovieId(this.movieId),
+            this.movieService.getSimilarMovieById(this.movieId),
+          ]);
+        }),
+        takeUntil(this.destroy$)
       )
-      .subscribe((GetMovieDetailsSuccess: MovieDetails) => {
-        this.movieDetails = GetMovieDetailsSuccess;
-        this.getMvoieCredits(this.movieId);
+      .subscribe(([details, credits, similar]: [MovieDetails, Credits, Movies]) => {
+        this.movieDetails = details;
+        this.credits = credits.cast.slice(0, 5);
+        this.similarMoviesList = similar.results;
+        this.similarMovies = this.movieService.formatMovieData(similar.results);
       });
-  }
-
-  public getMvoieCredits(movieId: number) {
-    this.movieService
-      .getCreditsByMovieId(movieId)
-      .subscribe((GetCreditsSuccess: Credits) => {
-        this.credits = GetCreditsSuccess.cast.slice(0, 5);
-        this.getSimilarMovies(this.movieId);
-      });
-  }
-
-  public getSimilarMovies(movieId: number) {
-    this.movieService
-      .getSimilarMovieById(movieId)
-      .subscribe((GetSimilarMoviesSuccess: Movies) => {
-        this.similarMoviesList = GetSimilarMoviesSuccess.results;
-        this.similarMovies = this.movieService.formatMovieData(
-          GetSimilarMoviesSuccess.results
-        );
-      });
-  }
-
-  public trailerHandlrer(url: string) {
-    window.open(url, '_blank');
   }
 
   public addToFavourites() {
-    const movieAdded = this.movieService.addToFavourites(this.movieDetails);
-    movieAdded
-      ? this.movieService.openSnackBar(
-          'Added to Favourites Successfully',
-          1000,
-          'success'
-        )
-      : this.movieService.openSnackBar('Movie Already Exists', 1000, 'error');
+    const added = this.movieService.addToFavourites(this.movieDetails);
+    added
+      ? this.notificationService.open('Added to Favourites Successfully', 1000, 'success')
+      : this.notificationService.open('Movie Already Exists', 1000, 'error');
   }
 
-  onMovieClickHandler(event: any) {
-    const movieId = this.movieService.getMovieId(
-      event,
-      this.similarMoviesList
-    ).id;
-    this.router.navigate(['/movie', movieId]);
+  public trailerHandler(url: string) {
+    window.open(url, '_blank');
+  }
+
+  onMovieClickHandler(movieIndex: number) {
+    const movie = this.similarMoviesList[movieIndex];
+    this.router.navigate(['/movie', movie.id]);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
