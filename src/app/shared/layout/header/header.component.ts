@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from 'firebase/auth';
 
 @Component({
@@ -6,12 +6,10 @@ import { User } from 'firebase/auth';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   @Output() logoutEvent: EventEmitter<any> = new EventEmitter();
   @Input() loggedInUser: User | any;
   constructor() {}
-
-  ngOnInit(): void {}
 
   signOut() {
     this.logoutEvent.emit();

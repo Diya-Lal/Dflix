@@ -30,17 +30,17 @@ describe('CardComponent', () => {
     expect(img.src).toContain('/test-poster.jpg');
   });
 
-  it('should emit an empty string from onCardClickedEvent when onClick is called', () => {
-    spyOn(component.onCardClickedEvent, 'emit');
+  it('should emit an empty string from cardClickedEvent when onClick is called', () => {
+    spyOn(component.cardClickedEvent, 'emit');
     component.onClick();
-    expect(component.onCardClickedEvent.emit).toHaveBeenCalledWith('');
+    expect(component.cardClickedEvent.emit).toHaveBeenCalledWith('');
   });
 
-  it('should emit onCardClickedEvent when the card container is clicked', () => {
-    spyOn(component.onCardClickedEvent, 'emit');
+  it('should emit cardClickedEvent when the card container is clicked', () => {
+    spyOn(component.cardClickedEvent, 'emit');
     const container: HTMLElement = fixture.debugElement.query(By.css('.card-container')).nativeElement;
     container.click();
-    expect(component.onCardClickedEvent.emit).toHaveBeenCalled();
+    expect(component.cardClickedEvent.emit).toHaveBeenCalled();
   });
 
   it('should update the rendered title when the title input changes', () => {
