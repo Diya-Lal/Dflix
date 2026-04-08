@@ -1,15 +1,10 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth } from '@angular/fire/auth';
-import { provideFirestore } from '@angular/fire/firestore';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { of } from 'rxjs';
 import { MaterialModule } from 'src/app/material.module';
-import { environment } from 'src/environments/environment';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SigninComponent } from './signin.component';
 
 describe('SigninComponent', () => {
@@ -17,17 +12,19 @@ describe('SigninComponent', () => {
   let fixture: ComponentFixture<SigninComponent>;
 
   beforeEach(async () => {
+    const mockAuthService = {
+      signInUser: jasmine.createSpy('signInUser').and.returnValue(of({})),
+    };
+
     await TestBed.configureTestingModule({
       declarations: [SigninComponent],
       imports: [
-        HttpClientTestingModule,
         MaterialModule,
         RouterTestingModule,
         BrowserAnimationsModule,
-        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
+        ReactiveFormsModule,
       ],
+      providers: [{ provide: AuthenticationService, useValue: mockAuthService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SigninComponent);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IMAGE_URL } from 'src/app/constants/urls-constants';
 
 @Component({
@@ -6,16 +6,14 @@ import { IMAGE_URL } from 'src/app/constants/urls-constants';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
 })
-export class CardComponent implements OnInit {
+export class CardComponent {
   @Input() image!: string;
   @Input() title!: string;
-  @Output() onCardClickedEvent: EventEmitter<string> = new EventEmitter();
+  @Output() cardClickedEvent: EventEmitter<string> = new EventEmitter();
   imageUrl: string = IMAGE_URL;
   constructor() {}
 
-  ngOnInit(): void {}
-
   onClick() {
-    this.onCardClickedEvent.emit('');
+    this.cardClickedEvent.emit('');
   }
 }

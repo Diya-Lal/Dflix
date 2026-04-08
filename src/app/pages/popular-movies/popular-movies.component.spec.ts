@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 import { PopularMoviesComponent } from './popular-movies.component';
 import { MaterialModule } from 'src/app/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +16,8 @@ describe('PopularMoviesComponent', () => {
         HttpClientTestingModule,
         MaterialModule,
         BrowserAnimationsModule,
+        FormsModule,
+        NgChartsModule,
       ],
       declarations: [PopularMoviesComponent],
     }).compileComponents();
