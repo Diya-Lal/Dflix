@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Auth } from '@angular/fire/auth';
+import { ɵAngularFireSchedulers } from '@angular/fire';
 import { AuthenticationService } from './authentication.service';
 
 describe('AuthenticationService', () => {
@@ -17,7 +18,10 @@ describe('AuthenticationService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [{ provide: Auth, useValue: mockAuth }],
+      providers: [
+        ɵAngularFireSchedulers,
+        { provide: Auth, useValue: mockAuth },
+      ],
     });
     service = TestBed.inject(AuthenticationService);
   });
