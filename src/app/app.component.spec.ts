@@ -1,39 +1,26 @@
-import { HttpClient } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth } from '@angular/fire/auth';
-import { provideFirestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 import { RouterTestingModule } from '@angular/router/testing';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { environment } from 'src/environments/environment';
 import { AppComponent } from './app.component';
-import { AuthenticationService } from './services/authentication.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
-    let httpClient: HttpClient;
-    let httpTestingController: HttpTestingController;
-    let authService: AuthenticationService;
+    const mockAuth = {
+      onAuthStateChanged: jasmine
+        .createSpy('onAuthStateChanged')
+        .and.callFake((cb: (user: null) => void) => {
+          cb(null);
+          return () => {};
+        }),
+      signOut: jasmine.createSpy('signOut').and.returnValue(Promise.resolve()),
+    };
+
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
-      ],
+      imports: [RouterTestingModule, HttpClientTestingModule],
       declarations: [AppComponent],
-      providers: [AuthenticationService],
+      providers: [{ provide: Auth, useValue: mockAuth }],
     }).compileComponents();
-    httpClient = TestBed.inject(HttpClient);
-    httpTestingController = TestBed.inject(HttpTestingController);
-    authService = TestBed.inject(AuthenticationService);
   });
 
   it('should create the app', () => {
@@ -41,5 +28,4 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
-
 });

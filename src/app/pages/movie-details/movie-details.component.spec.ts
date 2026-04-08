@@ -1,14 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideFirebaseApp } from '@angular/fire/app';
-import { provideAuth } from '@angular/fire/auth';
-import { provideFirestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 import { RouterTestingModule } from '@angular/router/testing';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 import { MaterialModule } from 'src/app/material.module';
-import { environment } from 'src/environments/environment';
+import { SliderComponent } from 'src/app/shared/components/slider/slider.component';
+import { NgImageSliderModule } from 'ng-image-slider';
 import { MovieDetailsComponent } from './movie-details.component';
 
 describe('MovieDetailsComponent', () => {
@@ -16,16 +12,25 @@ describe('MovieDetailsComponent', () => {
   let fixture: ComponentFixture<MovieDetailsComponent>;
 
   beforeEach(async () => {
+    const mockAuth = {
+      onAuthStateChanged: jasmine
+        .createSpy('onAuthStateChanged')
+        .and.callFake((cb: (user: null) => void) => {
+          cb(null);
+          return () => {};
+        }),
+      signOut: jasmine.createSpy('signOut').and.returnValue(Promise.resolve()),
+    };
+
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
         MaterialModule,
-        provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
-        provideAuth(() => getAuth()),
-        provideFirestore(() => getFirestore()),
+        NgImageSliderModule,
       ],
-      declarations: [MovieDetailsComponent],
+      declarations: [MovieDetailsComponent, SliderComponent],
+      providers: [{ provide: Auth, useValue: mockAuth }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MovieDetailsComponent);
